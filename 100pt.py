@@ -115,7 +115,7 @@ class MyApp:
 		global drawpad
                 x1,y1,x2,y2 = drawpad.coords(player)
                 tx1, ty1, tx2, ty2 = drawpad.coords(target)
-                if ((x1 >= (tx1-1)) and (x1 <=(tx2+1)) and ((y1 <= ty1))) and (y2 <= ty2):
+                if x1 >= tx1-1 and x1 <=tx2+1 and y1 <= ty1 and y2 <= ty2:
                     return False
                 else:
                     return True

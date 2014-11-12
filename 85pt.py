@@ -21,6 +21,7 @@ class MyApp:
 	def __init__(self, parent):
 	        # Make sure the drawpad is accessible from inside the function
 	        global drawpad
+	        x1, y1, x2, y2 = drawpad.coords(oval)
 		self.myParent = parent  
 		self.myContainer1 = Frame(parent)
 		self.myContainer1.pack()
@@ -32,7 +33,8 @@ class MyApp:
 	        self.button2 = Button(self.myContainer1)
 	        self.button2.configure(text="Right", background= "blue")
 	        self.button2.grid(row=1,column=2)
-	
+	        if y1 > 800:
+	            drawpad.move(oval,-10,0)
 	
 	
 		# "Bind" an action to the first button												
