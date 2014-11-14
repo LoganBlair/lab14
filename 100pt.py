@@ -13,14 +13,14 @@ from Tkinter import *
 root = Tk()
 # Create our drawpad and oval
 drawpad = Canvas(root, width=480,height=320, background='white')
-targetx1 = 200
-targety1 = 20
-targetx2 = 280
-targety2 = 80
-target = drawpad.create_rectangle(targetx1,targety1,targetx2,targety2, fill="blue")
+tx1 = 200
+ty1 = 20
+tx2 = 280
+ty2 = 80
+target = drawpad.create_rectangle(tx1,ty1,tx2,ty2, fill="blue")
 player = drawpad.create_rectangle(240,240,260,260, fill="pink")
 direction = 5
-
+didwehit = True
 
 class MyApp:
 	def __init__(self, parent):
@@ -53,7 +53,7 @@ class MyApp:
 		  
 		# This creates the drawpad - no need to change this 
 		drawpad.pack()
-		
+		self.animate()
 
 		
 	def button1Click(self, event):   
@@ -63,7 +63,8 @@ class MyApp:
                 x1,y1,x2,y2 = drawpad.coords(player)
                 drawpad.move(player,0,-5)
 		# Get the coords of our target
-             
+                if x1 < 0:
+                    drawpad.move(player,-4,0)
         	
 	def button2Click(self, event):   
 		global oval
@@ -86,27 +87,30 @@ class MyApp:
                 x1,y1,x2,y2 = drawpad.coords(player)
                 drawpad.move(player,0,5)	
 	
-	self.animate()
+	
 	
 	def animate(self):
 	    global drawpad
 	    global player
 	    global target
-	    x1, y1, x2, y2 = drawpad.coords(player)
-	    
-	    drawpad.move(target,direction,0)
+	    global direction
+	    x1, y1, x2, y2 = drawpad.coords(target)
+	    if x2 > 480:
+                direction = -5
+            elif x1 < 0:
+                direction = 5
+	    drawpad.move(target,direction,0)	    
 	    drawpad.after(10, self.animate)	
 
-
-				
-								
+							
 		
 		# Ensure that we are doing our collision detection
 		# After we move our object!
-            didWeHit = collisionDetect()
-            if(didWeHit == True):
+            didWeHit = self.collisionDetect()
+            if didWeHit == False:
+                direction = 0
                     # We made contact! Stop our animation!
-                    print "Do something"
+                print "Do something"
 	# Use a function to do our collision detection
 	# This way we only have to write it once, and call it from
 	# every button click function.
@@ -115,7 +119,8 @@ class MyApp:
 		global drawpad
                 x1,y1,x2,y2 = drawpad.coords(player)
                 tx1, ty1, tx2, ty2 = drawpad.coords(target)
-                if x1 >= tx1-1 and x1 <=tx2+1 and y1 <= ty1 and y2 <= ty2:
+                if  x1 > tx1 and x1 < tx2 + 1 and y1 > ty1 and y1 < ty2+1:
+                    didwehit = False
                     return False
                 else:
                     return True
